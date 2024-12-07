@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Carregar Imagem e Criar Link</title>
+</head>
+<body>
+    <input type="file" id="imagem_usuario" onchange="converter();" />
+    <div id="apresentar-imagem"></div>
+    <div id="nome-arquivo"></div>
+    <div id="link"></div>
+
+    <script>
+        // Função para trocar a extensão do arquivo
+        function trocarExtensao(nomeArquivo, novaExtensao) {
+            // Verificar se o nome do arquivo contém um ponto (.) indicando a presença de uma extensão
+            var posicaoDoPonto = nomeArquivo.lastIndexOf('.');
+            if (posicaoDoPonto === -1) {
+                // Se não houver ponto, adicionar a nova extensão diretamente
+                return nomeArquivo + '.' + novaExtensao;
+            }
+            // Substituir a extensão existente pela nova extensão
+            var nomeSemExtensao = nomeArquivo.substring(0, posicaoDoPonto);
+            return nomeSemExtensao + '.' + novaExtensao;
+        }
+
+        function converter() {
+            var receberArquivo = document.getElementById('imagem_usuario').files;
+            console.log(receberArquivo);
+
+            // Verificar se um arquivo foi selecionado
+            if (receberArquivo.length > 0) {
+                var carregarImagem = receberArquivo[0];
+                console.log(carregarImagem);
+
+                // Verificar o nome do arquivo
+                var nomeArquivo = carregarImagem.name;
+                document.getElementById('nome-arquivo').textContent = 'Nome do arquivo: ' + nomeArquivo;
+
+                // Trocar a extensão do arquivo de .jpg para .html
+                var novoNomeArquivo = trocarExtensao(nomeArquivo, 'html');
+
+                // Criar o link para outra página com o novo nome do arquivo
+                criarLink(novoNomeArquivo);
+
+                var lerArquivo = new FileReader();
+
+                lerArquivo.onload = function(arquivoCarregado) {
+                    var imagemBase64 = arquivoCarregado.target.result;
+
+                    // Criar o elemento HTML
+                    var novaImagem = document.createElement('img');
+
+                    // Atribuir a imagem para o atributo src
+                    novaImagem.src = imagemBase64;
+
+                    // Adicionar a imagem ao div
+                    document.getElementById('apresentar-imagem').innerHTML = '';
+                    document.getElementById('apresentar-imagem').appendChild(novaImagem);
+                }
+
+                // Ler o arquivo como URL de dados (Base64)
+                lerArquivo.readAsDataURL(carregarImagem);
+            } else {
+                alert('Por favor, selecione um arquivo.');
+            }
+        }
+
+        // Função para criar um link para outra página
+        function criarLink(nomeArquivo) {
+            var linkDiv = document.getElementById('link');
+            linkDiv.innerHTML = ''; // Limpar conteúdo anterior
+
+            var link = document.createElement('a');
+            link.href = encodeURIComponent(nomeArquivo); // Link para a página de detalhes com caminho relativo
+            link.textContent = 'Clique aqui para ver mais sobre ' + nomeArquivo;
+            linkDiv.appendChild(link);
+        }
+    </script>
+</body>
+</html>

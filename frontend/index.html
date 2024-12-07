@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/dex_2.css">
+    <title>Upload imagem</title>
+    <style>
+        .container {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imagem_usuario" onchange="converter();" />
+
+
+
+    <script>
+
+        var animal = [
+        ]
+    
+        function converter() {
+            var receberArquivo = document.getElementById('imagem_usuario').files;
+            console.log(receberArquivo);
+
+            // Verificar se algum arquivo foi selecionado
+            if (receberArquivo.length > 0) {
+                var carregarImagem = receberArquivo[0];
+                console.log(carregarImagem);
+    
+                var lerArquivo = new FileReader();
+    
+                lerArquivo.onload = function(arquivoCarregado) {
+                    var imagemBase64 = arquivoCarregado.target.result;
+                    console.log(imagemBase64)
+                    // Criar o elemento HTML
+                    var novaImagem = document.createElement('img');
+    
+                    // Atribuir a imagem para o atributo src
+                    novaImagem.src = imagemBase64;
+    
+                    // Adicionar a imagem ao div
+                    document.getElementById("apresentar-imagem").innerHTML = '';
+                    document.getElementById("apresentar-imagem").appendChild(novaImagem);
+                }
+    
+                lerArquivo.readAsDataURL(carregarImagem);
+                
+                //preciso da api do fabio para testar e saber se funciona
+                var imagemBase64 = reader.result.split(',')[1]; // Remove o prefixo do data URL
+                
+                var dados = {
+                    'usuario': 'admin',
+                    'foto': imagemBase64
+                };
+                //adiciono aqui a api
+                fetch('localhost:3000/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                })
+
+                .then(response => response.json())
+                .then(data => {
+                    //dados da API
+                    console.log('Sucesso:', data);
+                    var novoNome = data.nome; //declaração das variaveis para usar na pagina
+                    var dados = data.dados; //declaração das variaveis para usar na pagina
+                    var img = data.img; //declaração das variaveis para usar na pagina
+                    
+                    //habilitar e mostrar as imagens
+                    var container = document.getElementsByClassName('container');
+                    var informacao = document.getElementsByClassName('info')
+                    var img = document.getElementsByClassName('img')
+                    container.style.display = "block";
+
+                    document.getElementById('titulo').textContent = novoNome;
+                })
+                .catch((error) => {
+                    console.error('Erro:', error);
+                });
+            }
+
+        }
+
+
+        
+    </script>
+    
+</body>
+</html>

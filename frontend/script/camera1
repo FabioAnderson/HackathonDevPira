@@ -1,0 +1,40 @@
+document.getElementById('acessarCameraBtn').addEventListener('click', function() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function(stream) {
+                var video = document.getElementById('videoElement');
+                video.srcObject = stream; // Exibir o stream da câmera no elemento de vídeo
+            })
+            .catch(function(error) {
+                console.error('Erro ao acessar a câmera:', error);
+            });
+    } else {
+        console.log('Acesso à câmera não é suportado pelo navegador.');
+    }
+});
+
+// Função para capturar a imagem da câmera
+document.getElementById('captureBtn').addEventListener('click', function() {
+    var video = document.getElementById('videoElement');
+    var canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height); // Desenhar o frame atual do vídeo no canvas
+
+    var dataURL = canvas.toDataURL('image/jpg'); // Converter o conteúdo do canvas para URL de dados (Base64)
+    var capturedImage = document.getElementById('capturedImage');
+    capturedImage.src = dataURL; // Definir o src da imagem capturada com o URL de dados
+
+    // Converter a imagem para Base64 e exibir
+    var base64Output = document.getElementById('base64Output');
+    base64Output.textContent = dataURL;
+});
+
+// Função para salvar a imagem capturada
+document.getElementById('saveBtn').addEventListener('click', function() {
+    var capturedImage = document.getElementById('capturedImage');
+    var link = document.createElement('a');
+    link.href = capturedImage.src;
+    link.download = 'imagem_capturada.jpg'; // Nome do arquivo salvo
+    link.click(); // Simular o clique no link para iniciar o download
+});

@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background: linear-gradient(to left, #d0ffb5 , #e0ffd6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.container {
+    width: 75vw;
+    height: 75vh;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 50px;
+    text-align: center;
+} 
+
+p {
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+}
+

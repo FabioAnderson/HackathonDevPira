@@ -1,0 +1,300 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.6
+-- Dumped by pg_dump version 16.6
+
+-- Started on 2024-12-07 16:30:22
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 216 (class 1259 OID 16401)
+-- Name: animais; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.animais (
+    id integer NOT NULL,
+    nome character varying(100) NOT NULL,
+    nome_cientifico character varying(100),
+    descricao character varying(100),
+    ameacado character varying(100) DEFAULT 'nao'::character varying,
+    invasor character varying(100) DEFAULT 'nao'::character varying,
+    extinto character varying(100) DEFAULT 'nao'::character varying NOT NULL
+);
+
+
+ALTER TABLE public.animais OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 16400)
+-- Name: animais_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.animais_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.animais_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4867 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: animais_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.animais_id_seq OWNED BY public.animais.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 16465)
+-- Name: foto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.foto (
+    id integer NOT NULL,
+    fotografia_text text NOT NULL,
+    localizacao text,
+    id_animais integer NOT NULL,
+    id_usuario integer NOT NULL,
+    da_ho date
+);
+
+
+ALTER TABLE public.foto OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16464)
+-- Name: foto_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.foto_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.foto_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4868 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: foto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.foto_id_seq OWNED BY public.foto.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 16412)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuario (
+    id integer NOT NULL,
+    email character varying(100) NOT NULL,
+    senha character varying(100),
+    telefone character varying(15) DEFAULT '99999999999'::bigint
+);
+
+
+ALTER TABLE public.usuario OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 16411)
+-- Name: usuario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.usuario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.usuario_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4869 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.usuario_id_seq OWNED BY public.usuario.id;
+
+
+--
+-- TOC entry 4698 (class 2604 OID 16404)
+-- Name: animais id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.animais ALTER COLUMN id SET DEFAULT nextval('public.animais_id_seq'::regclass);
+
+
+--
+-- TOC entry 4704 (class 2604 OID 16468)
+-- Name: foto id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foto ALTER COLUMN id SET DEFAULT nextval('public.foto_id_seq'::regclass);
+
+
+--
+-- TOC entry 4702 (class 2604 OID 16415)
+-- Name: usuario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario ALTER COLUMN id SET DEFAULT nextval('public.usuario_id_seq'::regclass);
+
+
+--
+-- TOC entry 4857 (class 0 OID 16401)
+-- Dependencies: 216
+-- Data for Name: animais; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.animais (id, nome, nome_cientifico, descricao, ameacado, invasor, extinto) FROM stdin;
+17	CARCARA	Caracara plancus	Ave de rapina oportunista, conhecida por sua dieta variada e adaptabilidade.	nao	nao	nao
+18	SANHAÇO	Tangara sayaca	Ave frugívora e insetívora, de plumagem cinza-azulada, comum em jardins.	nao	nao	nao
+19	TEIU	Tupinambis teguixin	Grande lagarto terrestre, onívoro, encontrado em florestas e cerrados.	nao	nao	nao
+20	DODO	Raphus cucullatus	Ave extinta, não voadora, nativa de Maurício, exterminada no século XVII.	nao	nao	sim
+21	MAMUTE	Mammuthus primigenius	Grande mamífero extinto, coberto de pelos, adaptado ao clima frio.	nao	nao	sim
+22	URSO POLAR	Ursus maritimus	Grande carnívoro ártico, adaptado ao gelo, dependente de focas como alimento.	sim	sim	nao
+5	CAPIVARA	Hydrochoerus hydrochaeris	O maior roedor do mundo, herbívoro, social e semi-aquático.	nao	nao	nao
+7	GAMBA	Didelphis marsupialis	Marsupial noturno, onívoro, famoso por liberar um odor forte quando ameaçado.	nao	nao	nao
+8	MORCEGO	Tadarida brasiliensis	Mamífero voador, insetívoro, essencial no controle de pragas.	nao	nao	nao
+9	QUATI	Nasua nasua	Mamífero onívoro, de comportamento social, comum em florestas tropicais.	nao	nao	nao
+6	SAGUI	Callithrix jacchus	Pequeno primata arbóreo, onívoro, conhecido por sua adaptabilidade em áreas urbanas.	nao	nao	nao
+10	ONÇA PARDA	Puma concolor	Grande felino solitário, predador ágil, adaptável a diversos habitats.	sim	nao	nao
+11	OURIÇO	Erinaceus europaeus	Mamífero europeu, coberto de espinhos, noturno e insetívoro.	nao	nao	nao
+12	JAVAPORCO	Sus scrofa domesticus	Híbrido entre javali e porco doméstico, invasor e destrutivo para ecossistemas.	nao	nao	nao
+13	GARÇA BRANCA	Egretta alba	Ave aquática de plumagem branca, carnívora, comum em áreas alagadas.	nao	nao	nao
+14	BEM TE VI	Pitangus sulphuratus	Passarinho territorial, onívoro, com canto característico que dá nome à espécie.	nao	nao	nao
+15	BIGUA	Phalacrocorax brasilianus	Ave aquática mergulhadora, pescadora habilidosa, encontrada em rios e lagos.	nao	nao	nao
+16	SERIEMA	Cariama cristata	Ave terrestre do cerrado, onívora, famosa por seu canto longo e melodioso.	nao	nao	nao
+\.
+
+
+--
+-- TOC entry 4861 (class 0 OID 16465)
+-- Dependencies: 220
+-- Data for Name: foto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.foto (id, fotografia_text, localizacao, id_animais, id_usuario, da_ho) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4859 (class 0 OID 16412)
+-- Dependencies: 218
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuario (id, email, senha, telefone) FROM stdin;
+1	juan@hackathon.br	juanjuan	99999999999
+\.
+
+
+--
+-- TOC entry 4870 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: animais_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.animais_id_seq', 22, true);
+
+
+--
+-- TOC entry 4871 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: foto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.foto_id_seq', 1, false);
+
+
+--
+-- TOC entry 4872 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.usuario_id_seq', 2, true);
+
+
+--
+-- TOC entry 4706 (class 2606 OID 16410)
+-- Name: animais animais_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.animais
+    ADD CONSTRAINT animais_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4710 (class 2606 OID 16470)
+-- Name: foto foto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foto
+    ADD CONSTRAINT foto_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4708 (class 2606 OID 16418)
+-- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4711 (class 2606 OID 16471)
+-- Name: foto foto_id_animais_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foto
+    ADD CONSTRAINT foto_id_animais_fkey FOREIGN KEY (id_animais) REFERENCES public.animais(id);
+
+
+--
+-- TOC entry 4712 (class 2606 OID 16476)
+-- Name: foto foto_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.foto
+    ADD CONSTRAINT foto_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuario(id);
+
+
+-- Completed on 2024-12-07 16:30:22
+
+--
+-- PostgreSQL database dump complete
+--
+
